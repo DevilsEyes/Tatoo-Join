@@ -1,0 +1,298 @@
+*{
+    padding: 0;
+    margin:0;
+}
+
+ul{
+    list-style: none;
+}
+
+input,select,textarea{
+    -webkit-appearance: none;
+    outline: none;
+    border:0;
+    font-family: "方正兰亭黑", "微软雅黑", sans-serif;
+}
+
+input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{
+    color: #bfbfbf;
+    font-family: "方正兰亭黑", "微软雅黑", sans-serif;
+}
+
+a,a:link,a:visited,a:active,b,i,h1,h2,h3,h4,h5,h6{
+    text-decoration: none;
+    text-shadow: none;
+    font-weight: normal;
+    font-style:normal;
+}
+
+html {
+    font-family: "方正兰亭黑", "微软雅黑", sans-serif;
+    -webkit-appearance:none;
+}
+
+body{
+    min-width: 320px;
+    background-color: #f3f3f3;
+}
+
+.f36{font-size: 18px;}
+.f32{font-size: 16px;}
+.f28{font-size: 14px;}
+.f24{font-size: 12px;}
+
+.c79{color:#797979;}
+.c1a{color:#1a1a1a;}
+.cbf{color:#bfbfbf;}
+.c88{color:#888888;}
+.cOrange{color:#ff9000}
+
+.i-b{
+    display: inline-block;
+}
+
+.p-a{
+    position: absolute;
+}
+
+.blank{
+    width:100%;
+}
+
+.avatar{
+    width:60px;
+    height:60px;
+    border: solid 2px #f0b270;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.avatar img{
+    width:60px;
+}
+
+.btn{
+    border-radius: 999px;
+    background-color: transparent;
+    border: solid 2px #888888;
+    text-align: center;
+    padding: 10px 0;
+    color: #797979;
+    margin: 20px;
+}
+
+.btn:active{
+    border: solid 2px #f0b270;
+    background-color: #f0b270;
+    color: white;
+}
+
+#loading{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    padding-top: 200px;
+    text-align: center;
+    z-index: 999;
+    background-color: white;
+    opacity: 0.7;
+}
+
+#entry > div:nth-child(1){
+    background-color: white;
+    border: solid 1px #d8d8d8;
+    /*height:80px;*/
+    border-radius: 4px;
+    padding: 10px;
+    margin:30px 10px;
+}
+
+#entry > div:nth-child(1) .avatar{
+    margin:10px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+#entry .info{
+    vertical-align: middle;
+    display: inline-block;
+}
+
+#entry .info>p{
+    margin-bottom: 5px;
+}
+
+#entry > div:nth-child(2){
+    background-color: white;
+    border: solid 1px #d8d8d8;
+    /*height:80px;*/
+    border-radius: 4px;
+    padding: 10px 30px;
+    margin:30px 10px;
+}
+
+#entry > div.other >div:first-child{
+    border-bottom: solid 1px #d8d8d8;
+    padding:5px 10px;
+}
+
+#entry  > div.other  div.row{
+    padding: 10px 20px;
+    border-bottom: solid 1px #d8d8d8;
+}
+
+#entry  > div.other div.row > .subavatar{
+    width:50px;
+    height:50px;
+    border: solid 2px white;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-right: 10px;
+}
+
+#entry  > div.other div.row > .subavatar >img{
+    width:50px;
+}
+
+#entry  > div.other > div.row > div{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#register > .info{
+    margin-top: 30px;
+    text-align: center;
+}
+
+#register > .info > img{
+    width: 60px;
+    margin: 5px;
+}
+
+#register > .info > *{
+    text-align: left;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+#register .box{
+    margin: 20px 10px;
+    background-color: white;
+    border: solid 1px #d8d8d8;
+    border-radius: 4px;
+}
+
+#register .box .row{
+    padding: 10px;
+}
+
+#register .box .row:nth-child(2){
+    border-top: solid 1px #d8d8d8;
+}
+
+input[disabled],input:disabled{
+    background-color:white;
+}
+
+#register .getVec{
+    float: right;
+    border-radius: 0 0 4px 0;
+    background-color: #fec418;
+    color: white;
+    width: 80px;
+    text-align: center;
+    display: block;
+    margin:-10px;
+    padding: 11px;
+}
+
+.getVec.disable{
+    background-color: #dddddd;
+    color: #aaaaaa;
+}
+
+#register .btn{
+    margin-top:50px;
+}
+
+#join .info{
+    text-align: center;
+    margin:60px 0 50px 0;
+}
+
+#join .avatar{
+    margin:10px auto;
+}
+
+#join .box{
+    margin: 20px 10px;
+    background-color: white;
+    border: solid 1px #d8d8d8;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+#join .getVec{
+    float: right;
+    border-radius: 0 4px 4px 0;
+    background-color: #fec418;
+    color: white;
+    width: 80px;
+    text-align: center;
+    display: block;
+    margin:-10px;
+    padding: 11px;
+}
+
+#join .btn{
+    margin-top:50px;
+}
+
+#choose .info{
+    text-align: center;
+    margin:60px 0 50px 0;
+}
+
+#choose .info > h2{
+    margin:15px 0 0 0;
+}
+
+#choose .info > h3{
+    margin:5px;
+}
+
+#choose .avatar{
+    margin:10px auto;
+}
+
+#choose .btn{
+margin-top: 50px;
+}
+
+
+#finish .info{
+    margin:20px 0;
+    text-align: center;
+}
+
+#finish .info>img{
+    width: 70%;
+    margin:10px;
+}
+
+#finish .adv{
+    border-top: solid 1px #d8d8d8;
+    padding: 20px;
+    margin:10px;
+    text-align: center;
+}
+
+#finish .adv>img:first-child{
+    width: 70%;
+    margin:0 0 20px 0;
+}
+
+#finish .adv>img:last-child{
+    margin: 20px;
+    width: 90%;
+}
