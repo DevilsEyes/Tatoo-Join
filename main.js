@@ -12,9 +12,9 @@ var DATA = {
     resultColor: ''
 };
 
-var BaseUrl = 'http://api.meizhanggui.cc/V1.0.0/';
+//var BaseUrl = 'http://api.meizhanggui.cc/V1.0.0/';
 var _id = location.search.substr(1).match(/_id=([^\b&]*)/)[1];//获取机构id...之类的
-//var BaseUrl = 'http://123.57.42.13/V1.0.0/';
+var BaseUrl = 'http://123.57.42.13/V1.0.0/';
 
 var putTemp = function (ele, data) {
     var html = $('#' + ele).html(),
