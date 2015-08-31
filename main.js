@@ -1,6 +1,7 @@
 var DATA = {
     oldCN: '',
     companyName: '',
+    companyAvatar:'',
     nickname: '',
     n: 0,
     avatar: '',
@@ -12,6 +13,7 @@ var DATA = {
 };
 
 var BaseUrl = 'http://api.meizhanggui.cc/V1.0.0/';
+var _id = location.search.substr(1).match(/_id=([^\b&]*)/)[1];//获取机构id...之类的
 //var BaseUrl = 'http://123.57.42.13/V1.0.0/';
 
 var putTemp = function (ele, data) {
@@ -94,29 +96,37 @@ window.addEventListener('load', function () {
 (function () {
     //获取基本信息
     myJsonp({
-        url: BaseUrl + "",//----------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        callbackParameter: "callback",
+        url: BaseUrl + "Company/info?_method=GET",
+        data:{
+            conpanyId:_id,
+            clerks:true
+        },
         success: function (obj) {
             obj = $.parseJSON(obj);
 
             if (obj.code == 0) {
 
-                //选择必要的数据传递给DATA----------------------------------------<<<<<<<<<<<<<<<<<<<<
-                //...
-                DATA.companyName = '';
-                DATA.nickname = '';
-                DATA.n = 0;
-                DATA.avatar = '' ? 'imgs/def_avatar.jpg' : '' + '?imageView2/0/w/160';
-                DATA.joinList = [];
+                if(obj.data.companyInfo.switch==0){
+                    return result('fail','该店铺暂时不接受纹身师加入!');
+                }
+                DATA.companyAvatar = obj.data.companyInfo.logo?obj.data.companyInfo.logo + '?imageView2/0/w/160':'imgs/def_avatar.jpg';
+                DATA.companyName = obj.data.companyInfo.name;
+                DATA.n = obj.data.companyInfo?obj.data.companyInfo.clerkIdList:0;
+                DATA.joinList = obj.data.userList;
 
                 var $other = $('#entry .other');
                 if (DATA.joinList.length > 0) {
                     for (var i = 0; i < DATA.joinList.length; i++) {
+                        if(DATA.joinList[i].avatar == ''){
+                            DATA.joinList[i].avatar = 'imgs/def_avatar.jpg';
+                        }
+                        else{
+                            DATA.joinList[i].avatar += '?imageView2/0/w/160';
+                        }
                         $other.append(
                             '<div class="row">'
-                                //这要改！---------------------------------------<<<<<<<<<<<<<<<<<<<<
-                            + '<div class="subavatar"><img src="头像地址"/></div>'
-                            + '<div class="f32 c1a">官网名称</div>'
+                            + '<div class="subavatar"><img src="'+DATA.joinList[i].avatar+'"/></div>'
+                            + '<div class="f32 c1a">'+DATA.joinList[i].nickname+'</div>'
                             + '</div>'
                         );
                     }
@@ -149,7 +159,7 @@ var page_entry = {
         else {
             DATA.phonenum = ph;
             myJsonp({
-                url: BaseUrl + "",//----------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                url: BaseUrl + "User/h5Check?_method=GET",
                 data: {
                     phonenum: ph
                 },
@@ -158,13 +168,18 @@ var page_entry = {
 
                     if (obj.code == 0) {
 
-                        //分支记得填充数据---------------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                        //已注册，验证身份
-                        nowPage('join');
-
-                        //尚未注册
-                        nowPage('register');
-
+                        if(obj.data.userInfo){//已注册，验证身份
+                            if(obj.data.userInfo.avatar == ''){
+                                DATA.avatar = 'imgs/def_avatar.jpg';
+                            }else{
+                                DATA.avatar = obj.data.userInfo.avatar + '?imageView2/0/w/160';
+                            }
+                            DATA.nickname = obj.data.userInfo.nickname;
+                            nowPage('join');
+                        }
+                        else{//尚未注册
+                            nowPage('register');
+                        }
 
                     } else {
                         layer.msg(obj.msg);
@@ -189,7 +204,7 @@ var page_register = {
         }
 
         myJsonp({
-            url: BaseUrl + "",//----------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            url: BaseUrl + "User/h5Register?_method=PUT",
             data: {
                 phonenum: DATA.phonenum,
                 nickname: nickname,
@@ -201,7 +216,7 @@ var page_register = {
                 if (obj.code == 0) {
 
                     layer.msg('注册成功!');
-                    result('success', '您已成功加入' + DATA.companyName + '！');
+                    result('success');
 
                 } else {
                     layer.msg(obj.msg);
@@ -214,7 +229,7 @@ var page_register = {
         if (this.isClick || this.vecTime > 0)return;
 
         myJsonp({
-            url: BaseUrl + "",//----------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            url: BaseUrl + "User/h5RegisterCaptcha?_method=GET",
             data: {
                 phonenum: DATA.phonenum
             },
@@ -255,7 +270,7 @@ var page_join = {
         }
 
         myJsonp({
-            url: BaseUrl + "",//----------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            url: BaseUrl + "User/login?_method=POST",
             data: {
                 phonenum: DATA.phonenum,
                 captcha: captcha
@@ -265,16 +280,41 @@ var page_join = {
 
                 if (obj.code == 0) {
 
-                    //分支记得填充数据---------------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                    //已注册，是爱好者
-                    result('fail', '只有纹身师可以加入店铺！');
+                    if(parseInt(obj.data.ownUserInfo.sector)!=30){
+                        //不是纹身师
+                        result('fail', '只有纹身师可以加入店铺！');
+                    }
+                    else{
+                        if(obj.data.ownUserInfo.companyId){
+                            //有所属的纹身师
+                            if(obj.data.ownUserInfo.companyId==_id){
+                                result('fail','您已经在该机构中。');
+                            }
+                            else{
+                                nowPage('choose');
+                            }
+                        }
+                        else{
+                            //无所属的纹身师
+                            myJsonp({
+                                url:BaseUrl + "Company/clerk?_method=PUT",
+                                data:{
+                                    companyId:_id
+                                },
+                                success:function(obj){
+                                    obj = $.parseJSON(obj);
 
-                    //已注册，是纹身师，无所属机构
-                    //也不知道这里还需不需要继续请求？
-                    result('success');
+                                    if (obj.code == 0) {
+                                        result('success');
+                                    } else {
+                                        layer.msg(obj.msg);
+                                    }
+                                }
+                            });
+                            result('success');
+                        }
+                    }
 
-                    //已注册，是纹身师，有所属机构
-                    nowPage('choose');
 
                 } else {
                     layer.msg(obj.msg);
@@ -287,7 +327,7 @@ var page_join = {
         if (this.isClick || this.vecTime > 0)return;
 
         myJsonp({
-            url: BaseUrl + "",//----------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            url: BaseUrl + "User/h5RegisterCaptcha?_method=GET",
             data: {
                 phonenum: DATA.phonenum
             },
@@ -320,7 +360,10 @@ var page_choose = {
     isClick:false,
     btn$click:function(){
         myJsonp({
-            url:BaseUrl + "",//----------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            url:BaseUrl + "Company/clerk?_method=PUT",
+            data:{
+                companyId:_id
+            },
             success:function(obj){
                 obj = $.parseJSON(obj);
 
