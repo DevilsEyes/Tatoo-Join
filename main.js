@@ -183,6 +183,7 @@ var page_entry = {
                                 DATA.avatar = obj.data.userInfo.avatar + '?imageView2/0/w/160';
                             }
                             DATA.nickname = obj.data.userInfo.nickname;
+                            DATA.oldCN = obj.data.companyName;
 
                             if (parseInt(obj.data.userInfo.sector) != 30) {
                                 //不是纹身师
