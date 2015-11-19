@@ -112,6 +112,7 @@ window.addEventListener('load', function () {
             if (obj.code == 0) {
                 console.dir(obj);
 
+                obj.data.company.switch = +obj.data.company.switch||0;
                 if (obj.data.company.switch == 0) {
                     return result('fail', '该店铺暂时不接受纹身师加入!');
                 }
